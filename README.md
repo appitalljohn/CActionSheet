@@ -33,6 +33,7 @@ Credits/Comments/Updates are always welcome.
         { id = 0, label = "Cancel", buttonUpImage="actionsheet/actionBlackButton.png",
         buttonLabelColor={ default={ 255,255,255,255 }, over={ 255,255,255,255 }}, buttonDownImage="actionsheet/actionBlackButton.png"},
         { id = 1, label="OK", buttonOverColor=colorsRGB.blue } } 
+<<<<<<< HEAD
         
         -- create the action sheet object
         actionSheet = actionsheet.new (buttons, {_W /2, 0,labelColor=colorsRGB.blue, message="Choose an option", messageSize=18,
@@ -104,4 +105,6 @@ So your first button in table will be the bottom button on the action sheet
 
         
 
+=======
+>>>>>>> Increased default width of button
 	

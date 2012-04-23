@@ -45,7 +45,8 @@ function actionSheet.new( buttons, params )
                 message="Which option would you like?",
                 onShowEvent=nil,
                 onHideEvent=nil,
-                messageSize=14
+                messageSize=14,
+                messageColor= {0,255,255,0}
 	}
         
         
@@ -65,7 +66,7 @@ function actionSheet.new( buttons, params )
         local onShowEvent = params.onShowEvent or nil
         local onHideEvent = params.onHideEvent or nil
         local messageSize = params.messageSize or assetTable.messageSize
-        
+        local messageColor = params.messageColor or assetTable.messageColor
         -- set up default buttons
 	if not buttons then
 		
@@ -107,6 +108,7 @@ function actionSheet.new( buttons, params )
         local actionLabel = display.newText( actionSheetGroup, 
             default, 10, actionSheetBG.y+30, W, 0, fontFamily, messageSize )
        actionLabel.x = (W/2)
+       --actionLabel:setTextColor( {0} )
         actionSheetGroup:insert(actionLabel )
         
         
@@ -120,10 +122,12 @@ function actionSheet.new( buttons, params )
 		-- Define some button-specific variables
 		local buttonID, buttonLabel, onPress, onRelease, 
                 onEvent, width, isDown, height, buttonUpImage, buttonDownImage, buttonTop, buttonOverColor, 
-                buttonLabelColor, buttonOnRelease, buttonLabelColor =
-			tostring(i), "Label", nil, nil, nil, 200, false, 45, "actionsheet/actionWhiteButton.png", 
+                buttonLabelColor, buttonOnRelease, buttonLabelColor, buttonFont, buttonFontSize =
+                
+			tostring(i), "Label", nil, nil, nil, 250, false, 45, "actionsheet/actionWhiteButton.png", 
                         "actionsheet/actionWhiteButton.png", 10, {128, 128, 128, 255}, { default={ 255, 255, 255, 255 }, 
-                        over={ 128, 255, 96, 255 } }, nil, { default={ 0 }, over={ 255, 255, 255, 255 }} 
+                        over={ 128, 255, 96, 255 } }, nil, { default={ 0 }, over={ 255, 255, 255, 255 }},
+                        "HelveticaNeue-Bold", 18
                         
 		
 		buttonID = buttonRow.id or id
@@ -139,10 +143,12 @@ function actionSheet.new( buttons, params )
                 buttonOverColor = buttonRow.buttonOverColor or buttonOverColor
                 buttonOnRelease = buttonRow.buttonOnRelease or buttonOnRelease
                 buttonLabelColor = buttonRow.buttonLabelColor or buttonLabelColor
+                buttonFont = buttonRow.buttonFont or buttonFont
+                buttonFontSize = buttonRow.buttonFontSize or buttonFontSize
                 
                 local b = widget.newButton {
 			id = buttonID,
-			left =  62,
+			left =  35,
 			top = nextY,
 			default = buttonUpImage,
 			over = buttonDownImage,
@@ -150,7 +156,8 @@ function actionSheet.new( buttons, params )
 			width = width, height = height,
 			cornerRadius = 0,
                         label = buttonLabel,
-                        fontSize = 18,
+                        fontSize = buttonFontSize,
+                        font = buttonFont,
                         emboss = false,
                         labelColor = buttonLabelColor,
 			onRelease = onButtonPressed
@@ -188,6 +195,10 @@ function actionSheet.new( buttons, params )
      
           function actionSheetGroup:show(speed)
 
+                if speed < 500 then
+                speed = 500
+                end
+                
                if self.shown == false then
                 transition.to( self, { time=speed, y=self.y - self.height, onComplete=self.onShowEvent } )
                 self.shown = true
@@ -195,6 +206,10 @@ function actionSheet.new( buttons, params )
            end
            
            function actionSheetGroup:hide(speed)
+               
+               if speed < 500 then
+                   speed = 500
+               end
                
                if self.shown == true then
                    transition.to( self, {time=speed, y=self.y + self.height, onComplete=self.onHideEvent} )
