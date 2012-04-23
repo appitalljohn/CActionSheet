@@ -15,8 +15,7 @@ package.loaded[modname] = actionSheet
 function onButtonPressed(event)
     
     -- hide our parent
-    --event.target.parent:hide( 500 )
-    
+
     id = event.target.id
     event.target.parent:didCloseWithButtonID(id, 500)
 end
@@ -67,6 +66,7 @@ function actionSheet.new( buttons, params )
         local onHideEvent = params.onHideEvent or nil
         local messageSize = params.messageSize or assetTable.messageSize
         local messageColor = params.messageColor or assetTable.messageColor
+        
         -- set up default buttons
 	if not buttons then
 		
@@ -200,6 +200,12 @@ function actionSheet.new( buttons, params )
                 end
                 
                if self.shown == false then
+                  
+                  -- reset our parent to bring the control back to front
+                  
+                  local parent = self.parent
+                  parent:remove(self)
+                  parent:insert(self)
                 transition.to( self, { time=speed, y=self.y - self.height, onComplete=self.onShowEvent } )
                 self.shown = true
                end
@@ -212,6 +218,9 @@ function actionSheet.new( buttons, params )
                end
                
                if self.shown == true then
+                   local parent = self.parent
+                  parent:remove(self)
+                  parent:insert(self)
                    transition.to( self, {time=speed, y=self.y + self.height, onComplete=self.onHideEvent} )
                    self.shown = false
                end
