@@ -15,7 +15,6 @@ package.loaded[modname] = actionSheet
 function onButtonPressed(event)
     
     -- hide our parent
-
     id = event.target.id
     event.target.parent:didCloseWithButtonID(id, 500)
 end
@@ -87,9 +86,10 @@ function actionSheet.new( buttons, params )
         overlayImage.isFullResolution = true;
         overlayImage.x = W / 2
         overlayImage.y = H / 2
+        overlayImage.alpha = 0
         overlayImage:setReferencePoint( display.CenterReferencePoint )
         actionSheetGroup:insert(overlayImage)
-        
+        actionSheetGroup.overlay = overlayImage;
      
         
         local numRows = #buttons
@@ -207,6 +207,7 @@ function actionSheet.new( buttons, params )
                   parent:remove(self)
                   parent:insert(self)
                 transition.to( self, { time=speed, y=self.y - self.height, onComplete=self.onShowEvent } )
+                transition.to(self.overlay, {time=100, delay=speed, alpha=1} )
                 self.shown = true
                end
            end
@@ -222,6 +223,7 @@ function actionSheet.new( buttons, params )
                   parent:remove(self)
                   parent:insert(self)
                    transition.to( self, {time=speed, y=self.y + self.height, onComplete=self.onHideEvent} )
+                    transition.to(self.overlay, {time=0, delay=0, alpha=0} )
                    self.shown = false
                end
            end
